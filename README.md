@@ -1,6 +1,15 @@
-# gallery_box
+# Gallerybox
 
-Um aplicativo de Galeria para celular
+Um aplicativo organizador de galerias para celular.
+
+## Integrantes
+
+| Nome                          | RA     | Turma Mobile | Turma PA  |
+| ----------------------------- | ------ | ------------ | --------- |
+| Carlos Eduardo do Prado Silva | 190715 | CP110TIN3    | PA038TIN1 |
+| Gabriel Maciel Silvério       | 190654 | CP110TIN3    | PA038TIN1 |
+| Matheus Bernardo Frate        | 190110 | CP110TIN3    | PA038TIN1 |
+| Higor Matheus Luvizotto Deni  | 160291 | Nenhuma      | PA038TIN3 |
 
 ## Getting Started
 
