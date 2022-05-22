@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
-
+import 'folder.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,13 +35,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String directory = '';
+  // String directory = '';
   String ImagePath = '';
+  String folderPath1 = '';
+  int countFile = 0;
+  final folders = new Folder();
 
   @override
   Widget build(BuildContext context) {
     final ButtonStyle style =
-    TextButton.styleFrom(primary: Theme.of(context).colorScheme.onPrimary);
+    TextButton.styleFrom(primary: Theme
+        .of(context)
+        .colorScheme
+        .onPrimary);
 
     return Scaffold(
         appBar: AppBar(
@@ -51,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               style: style,
               onPressed: () {
-                selecionarPasta();
+                selectFolder();
               },
               child: const Text('Image'),
             ),
@@ -63,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             IconButton(
               icon: const Icon(Icons.navigate_next),
-              tooltip: 'Go to the next page',
+              tooltip: 'Vá para a proxima foto',
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute<void>(
                   builder: (BuildContext context) {
@@ -102,22 +108,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: ListTile(
                         leading: Icon(Icons.download),
                         title: Text('Mover para a pasta 1'),
-                        onTap: selecionarImagem,
+                        onTap: mover,
+                        onLongPress: changeFolderPath,
                         iconColor: Colors.white,
                         textColor: Colors.white,
                       ),
                     ),
-                    Container(
-                      width: 170,
-                      height: 100,
-                      child: ListTile(
-                        leading: Icon(Icons.download),
-                        title: Text('Pasta 2'),
-                        onTap: selecionarImagem,
-                        iconColor: Colors.white,
-                        textColor: Colors.white,
-                      ),
-                    )
                   ],
                 ),
               ]
@@ -126,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  selecionarImagem() async {
+  selectImage() async {
     final ImagePicker picker = ImagePicker();
 
     try {
@@ -141,37 +137,64 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  selecionarPasta() async {
+  changeFolderPath() async{
     FilePicker.platform.clearTemporaryFiles();
     String? directoryPath = await FilePicker.platform.getDirectoryPath();
-    directory = directoryPath!;
-    await changeImage();
-  }
-  changeImage() async {
-    List files = Directory(directory.toString()).listSync();
-    setState(() =>{
-      ImagePath = files[0].toString().substring(7, files[0].toString().length - 1)
-    });
+    folderPath1 = directoryPath!;
   }
 
+  selectFolder() async{
+    await folders.selectFolder();
+    countFile = 0;
+    await changePicture();
+  }
+
+  changePicture() async {
+    List files = Directory(folders.getPath()).listSync();
+    if(countFile >= files.length - 2) {
+      countFile = 0;
+    } else {
+      countFile++;
+    }
+    setState(() =>
+    {
+      ImagePath = files[countFile].toString().
+      substring(7, files[0]
+          .toString()
+          .length - 1)
+    });
+  }
 
 
   Future<void> deleteImagem() async {
     try {
       FileSystemEntity x = await File(ImagePath);
-      print(directory);
       if (x.existsSync()) {
         x.deleteSync();
         setState(() =>
         {
-          ImagePath = '',1
+          ImagePath = '', 1
         });
-        //     await file.delete();
+        await changePicture();
       }
     } catch (e) {
       print(e);
     }
   }
+
+  mover() {
+        moveFile(File(ImagePath), folderPath1);
+  }
+
+  Future<File> moveFile(File imagePath, String newPath) async {
+    newPath = newPath + '/' + ImagePath.split('/').last.toString();
+    try {
+      return await imagePath.rename(newPath);
+    } on FileSystemException catch (e) {
+      final newFile = await imagePath.copy(newPath);
+      await changePicture();
+      // await imagePath.delete();
+      return newFile;
+    }
+  }
 }
-
-
