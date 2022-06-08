@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'folder.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -71,33 +74,25 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: const Icon(Icons.navigate_next),
               tooltip: 'Vá para a proxima foto',
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (BuildContext context) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        title: const Text('Next page'),
-                      ),
-                      body: const Center(
-                        child: Text(
-                          'This is the next page',
-                          style: TextStyle(fontSize: 24),
-                        ),
-                      ),
-                    );
-                  },
-                ));
+                changePicture();
               },
             ),
           ],
         ),
+
+        resizeToAvoidBottomInset : true,
         body: Center(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image(
-                  image: ImagePath != '' ? Image
-                      .file(File(ImagePath))
-                      .image : AssetImage('assets/attach.png'),
+                Flexible(
+                  child: Image(
+                    image: ImagePath != '' ? Image
+                        .file(File(ImagePath))
+                        .image : AssetImage('assets/attach.png'),
+                    fit: BoxFit.fitHeight,
+
+                  ),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -118,24 +113,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ]
           ),
-        )
+        ),
     );
   }
 
-  selectImage() async {
-    final ImagePicker picker = ImagePicker();
-
-    try {
-      XFile? file = await picker.pickImage(source: ImageSource.gallery);
-      if (file != null) {
-        setState(() => {
-          ImagePath = file.path
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // selectImage() async {
+  //   final ImagePicker picker = ImagePicker();
+  //
+  //   try {
+  //     XFile? file = await picker.pickImage(source: ImageSource.gallery);
+  //     if (file != null) {
+  //       setState(() => {
+  //         ImagePath = file.path
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   changeFolderPath() async{
     FilePicker.platform.clearTemporaryFiles();
@@ -156,20 +151,27 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       countFile++;
     }
-    setState(() =>
-    {
-      ImagePath = files[countFile].toString().
-      substring(7, files[0]
-          .toString()
-          .length - 1)
-    });
+    if(files.length != 0) {
+      setState(() =>
+      {
+        ImagePath = files[countFile].toString().
+        substring(7, files[countFile]
+            .toString()
+            .length - 1)
+      });
+    } else {
+      setState(() =>
+      {
+        ImagePath = ''
+      });
+    }
   }
 
 
   Future<void> deleteImagem() async {
+    FileSystemEntity x = await File(ImagePath);
     try {
-      FileSystemEntity x = await File(ImagePath);
-      if (x.existsSync()) {
+      if ( x.existsSync()) {
         x.deleteSync();
         setState(() =>
         {
@@ -188,13 +190,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<File> moveFile(File imagePath, String newPath) async {
     newPath = newPath + '/' + ImagePath.split('/').last.toString();
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.manageExternalStorage
+    ].request();
     try {
-      return await imagePath.rename(newPath);
+      await imagePath.rename(newPath);
+      return await changePicture();
     } on FileSystemException catch (e) {
-      final newFile = await imagePath.copy(newPath);
       await changePicture();
-      // await imagePath.delete();
-      return newFile;
+      final newFile = await imagePath.copy(newPath);
+      await imagePath.delete();
+      return imagePath;
     }
   }
 }
