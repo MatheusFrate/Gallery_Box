@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 
 class Folder  {
   String _path = '';
-  String _size = '';
-  int ImageIndex = 0;
+  int imageIndex = 0;
 
   String getPath() {
     return _path;
