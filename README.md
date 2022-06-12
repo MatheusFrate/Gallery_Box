@@ -15,23 +15,25 @@ Com o Gallerybox, você pode selecionar uma pasta origem da qual deseja mover o 
 
 ## Funcionalidades
 
-- Selecionar pasta origem - A pasta que contém as imagens que serão organizadas: Pressionar o botão "Image" no AppBar. Ao selecionar a pasta que deseja organizar, o programa irá exibir as imagens dentro dela uma a uma.
+- Selecionar pasta origem - A pasta que contém as imagens que serão organizadas: Pressionar o botão "Source Folder" no AppBar na primeira aba. Ao selecionar a pasta que deseja organizar, o programa irá exibir as imagens dentro dela uma a uma.
 
-- Selecionar pasta destino - Pastas que serão usadas como destino para mover as imagens: Pressionar e segurar o botão abaixo da imagem exibida para selecionar a pasta de destino.
+- Selecionar pasta destino - Pastas que serão usadas como destino para mover as imagens. Pressionar o botão "Target Folder" no AppBar na segunda aba. Ao selecionar a pasta que deseja organizar, o programa irá exibir as pasta em uma grade de pastas.
 
-- Excluir imagem: Pressionar o botão com ícone de lixeira no AppBar.
+- Excluir imagem: Pressionar o botão com ícone de lixeira.
+
+- Mover imagem: Tocar na pasta destino.
 
 ## Getting Started
 
-Requer Android SDK, Node.js, yarn e expo-cli.
+Requer Android SDK, Node.js, flutter-cli
 
 ### Via emulador
 
 1. Clone o repositório
 
-2. Abra o terminal e digite o comando `yarn` para instalar as dependências
+2. Abra o terminal e digite o comando `flutter pub get` para instalar as dependências (requer flutter >= 2.17.0 < 3.0.0)
 
-3. Em seguida, digite o comando `yarn android` para iniciar o aplicativo
+3. Em seguida, digite o comando `flutter run` para iniciar o aplicativo (requer que o dispositivo virtual esteja rodando)
 
 ### Via depuração USB
 
@@ -47,9 +49,6 @@ Requer Android SDK, Node.js, yarn e expo-cli.
 
 ## Screenshots
 
-![Tela Inicial do Aplicativo](https://user-images.githubusercontent.com/35001712/170147443-30c328d7-4961-41ba-b00c-37cbb99c9f0d.png)
+<img src="https://user-images.githubusercontent.com/35001712/173212851-ebc787ad-671b-43b1-899f-442ae269032f.png" height="600em" />
 
-![Tela do Aplicativo com uma pasta origem selecionada](https://user-images.githubusercontent.com/35001712/170147697-0310b745-d5ce-4904-a648-f2f320e509c3.png)
-
-
-
+<img src="https://user-images.githubusercontent.com/35001712/173212860-0e4d3f34-d965-414e-b3c0-9d7c959f73e4.png" height="600em" />
