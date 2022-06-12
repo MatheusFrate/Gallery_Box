@@ -11,7 +11,6 @@ class Gallerybox extends StatelessWidget {
   static const Color _darkFillColor = Colors.white;
   static final Color _darkFocusColor = Colors.white.withOpacity(0.12);
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,18 +22,17 @@ class Gallerybox extends StatelessWidget {
 
   _buildThemeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
-      colorScheme: colorScheme,
-      primaryColor: colorScheme.background,
-      focusColor: focusColor,
-      highlightColor: Colors.transparent,
-      scaffoldBackgroundColor: colorScheme.background,
-      canvasColor: colorScheme.background,
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: colorScheme.surface,
-        selectedItemColor: Color(0xFFbdbdbd),
-        unselectedItemColor: colorScheme.secondary,
-      )
-    );
+        colorScheme: colorScheme,
+        primaryColor: colorScheme.background,
+        focusColor: focusColor,
+        highlightColor: Colors.transparent,
+        scaffoldBackgroundColor: colorScheme.background,
+        canvasColor: colorScheme.background,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: colorScheme.surface,
+          selectedItemColor: const Color(0xFFbdbdbd),
+          unselectedItemColor: colorScheme.secondary,
+        ));
   }
 
   _buildColorScheme() {

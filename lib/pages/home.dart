@@ -3,10 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:gallerybox/pages/albums.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'file_manager.dart';
+import 'organizer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  static Function? requestPermissionCallback;
+  static Function? homePageGoToPageCallback;
+
+  static ScaffoldMessengerState? scaffoldMessenger;
 
   @override
   State<StatefulWidget> createState() {
@@ -17,18 +22,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
 
+
+
   @override
   void initState() {
-    _requestPermissions();
     super.initState();
+
+    _requestPermissions();
+    HomePage.requestPermissionCallback = _requestPermissions;
+    HomePage.homePageGoToPageCallback = _onItemTapped;
   }
 
   @override
   Widget build(BuildContext context) {
-    const _pages = [
-      FileManager(),
-      Albums()
-    ];
+    const _pages = <Widget>[Organizer(), Albums()];
+
+    HomePage.scaffoldMessenger = ScaffoldMessenger.of(context);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -47,11 +56,11 @@ class _HomePageState extends State<HomePage> {
 
   static const bottomNavigationBarItems = [
     BottomNavigationBarItem(
-      icon: Icon(Icons.home),
+      icon: Icon(Icons.photo_album),
       label: 'Organize',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.photo_album),
+      icon: Icon(Icons.folder),
       label: 'Albums',
     ),
   ];
