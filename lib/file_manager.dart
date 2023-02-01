@@ -19,7 +19,7 @@ class FileManager {
       File newFile = await file.copy(targetPath);
       await newFile.setLastModified(modificationTime);
       await file.delete();
-      sourceFolder.updateFiles();
+      await sourceFolder.updateFiles();
     } catch (e) {
       print(e);
     }
@@ -48,13 +48,15 @@ class Folder {
     }
   }
 
-  void updateFiles() {
+  updateFiles() async {
     List filesInDirectory = Directory(path!).listSync();
-
     files.clear();
-    for (File file in filesInDirectory) {
-      if (file.path.endsWith('.jpg') || file.path.endsWith('.jpeg')) {
-        files.add(file);
+    for (int i = 0; i < filesInDirectory.asMap().length; i++ ) {
+      if(!filesInDirectory.asMap()[i].toString().startsWith("Directory")){
+        File file = filesInDirectory.asMap()[i];
+        if (file.path.endsWith('.jpg') || file.path.endsWith('.jpeg')) {
+          files.add(file);
+        }
       }
     }
   }

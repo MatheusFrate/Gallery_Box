@@ -185,7 +185,7 @@ class _OrganizerState extends State<Organizer> {
 
   _onFileChanged(int index) {
     setState(() {
-      currentFileIndex = index;
+     currentFileIndex = index;
     });
   }
 
@@ -212,9 +212,8 @@ class _OrganizerState extends State<Organizer> {
     String targetPath = folder.path! + '/' + file.path.split('/').last;
 
     try {
-      FileManager.moveFile(file, targetPath);
+      await FileManager.moveFile(file, targetPath);
       FileManager.sourceFolder.updateFiles();
-      
       _updateState();
     } catch (e) {
       HomePage.scaffoldMessenger?.showSnackBar(_buildErrorSnackBar());
